@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { SDKProvider } from '@tma.js/sdk-react';
-import { useInitData, useLaunchParams, type User } from '@tma.js/sdk-react';
+import { useInitData, useLaunchParams, } from '@tma.js/sdk-react';
 
 function App() {
   const [count, setCount] = useState(0)
