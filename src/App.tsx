@@ -1,45 +1,38 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-import { useInitData, useLaunchParams, } from '@tma.js/sdk-react';
-
+import "./App.css";
+import RenderRouter from "@/route/index";
+import { AppRoot } from "@telegram-apps/telegram-ui";
+import { bindMiniAppCSSVars, useLaunchParams, useMiniApp, useThemeParams } from "@tma.js/sdk-react";
+import { useEffect } from "react";
+// import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
+import { HashRouter } from "react-router-dom";
 function App() {
-  const [count, setCount] = useState(0)
-  const initData = useInitData();
-  const initDataRaw = useLaunchParams()
-  useEffect(()=>{
-    console.log(initData);
-    console.log(initDataRaw);
-    
-  },[])
+
+  const miniApp = useMiniApp();
+  const themeParams = useThemeParams();
+  const lp = useLaunchParams();
+  // const initData = useInitData();
+  // const initDataRaw = useLaunchParams();
+  // useEffect(() => {
+  //   console.log(initData);
+  //   console.log(initDataRaw);
+  // }, []);
+
+  useEffect(() => {
+    return bindMiniAppCSSVars(miniApp, themeParams);
+  }, [miniApp, themeParams]);
+  
   return (
     <>
-
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-
+      <AppRoot
+        appearance={miniApp.isDark ? "dark" : "light"}
+        platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
+      >
+        <HashRouter>
+          <RenderRouter />
+        </HashRouter>
+      </AppRoot>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
