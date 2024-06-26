@@ -11,6 +11,7 @@ function App() {
   const themeParams = useThemeParams();
   const lp = useLaunchParams();
 
+  console.log(1);
   
   
   // const initData = useInitData();
