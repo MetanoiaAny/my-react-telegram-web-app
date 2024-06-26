@@ -10,6 +10,9 @@ function App() {
   const miniApp = useMiniApp();
   const themeParams = useThemeParams();
   const lp = useLaunchParams();
+
+  
+  
   // const initData = useInitData();
   // const initDataRaw = useLaunchParams();
   // useEffect(() => {
