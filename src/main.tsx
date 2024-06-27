@@ -8,7 +8,7 @@ import Root from '@/layout/Root'
 
 import '@telegram-apps/telegram-ui/dist/styles.css';
 
-// import './mockEnv.ts';
+import './mockEnv.ts';
 
 WebApp.ready();
 

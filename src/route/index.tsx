@@ -5,6 +5,7 @@ import { useRoutes, RouteObject,Navigate } from "react-router-dom";
 
 
 import Home from '@/pages/Home/Home'
+import Earn from '@/pages/Earn/Earn'
 
 const routers: RouteObject[] = [
   {
@@ -19,6 +20,10 @@ const routers: RouteObject[] = [
         path: "Home",
         element: <Home></Home>,
       },
+      {
+        path: "Earn",
+        element: <Earn></Earn>,
+      }
     ],
   }
 ]

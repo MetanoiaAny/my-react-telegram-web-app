@@ -5,7 +5,7 @@ import Menu from './menu/menu'
 
 function AppLayout() {
   return (
-    <div>
+    <div className='min-h-screen bg-[#000]'>
         <Outlet />
         <Menu />
     </div>
