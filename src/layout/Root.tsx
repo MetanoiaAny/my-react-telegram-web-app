@@ -3,22 +3,22 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { type FC, useMemo } from 'react';
 
 import App from "@/App";
-// import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
-// const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
-//   <div>
-//     <p>An unhandled error occurred:</p>
-//     <blockquote>
-//       <code>
-//         {error instanceof Error
-//           ? error.message
-//           : typeof error === 'string'
-//             ? error
-//             : JSON.stringify(error)}
-//       </code>
-//     </blockquote>
-//   </div>
-// );
+const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
+  <div>
+    <p>An unhandled error occurred:</p>
+    <blockquote>
+      <code>
+        {error instanceof Error
+          ? error.message
+          : typeof error === 'string'
+            ? error
+            : JSON.stringify(error)}
+      </code>
+    </blockquote>
+  </div>
+);
 
 const Inner: FC = () => {
   // const debug = useLaunchParams().startParam === 'debug';
@@ -44,9 +44,8 @@ const Inner: FC = () => {
 
 export default function Root() {
   return (
-    <Inner/>
-    // <ErrorBoundary fallback={ErrorBoundaryError}>
-    //   <Inner/>
-    // </ErrorBoundary>
+    <ErrorBoundary fallback={ErrorBoundaryError}>
+      <Inner/>
+    </ErrorBoundary>
   );
 }
