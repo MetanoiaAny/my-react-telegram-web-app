@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { ActionSheet } from "react-vant";
+import { ActionSheet, Button } from "react-vant";
 
 export default function Earn() {
   const taskRef = useRef<TaskModalType | null>(null);
@@ -7,10 +7,15 @@ export default function Earn() {
   return (
     <>
       <div className="h-full w-full flex justify-center items-center flex-col">
-        <div className="my-[20px] " onClick={() => taskRef.current?.onShow(' Join our TG channel',0)}>
+        <div
+          className="my-[20px] "
+          onClick={() => taskRef.current?.onShow(" Join our TG channel", 0)}
+        >
           Join our TG channel
         </div>
-        <div onClick={() => taskRef.current?.onShow('Follow our X account',1)} >Follow our X account </div>
+        <div onClick={() => taskRef.current?.onShow("Follow our X account", 1)}>
+          Follow our X account{" "}
+        </div>
       </div>
       <TaskModal ref={taskRef}></TaskModal>
     </>
@@ -19,7 +24,7 @@ export default function Earn() {
 
 // 定义导出的方法的类型
 interface TaskModalType {
-  onShow: (type: string,model: number) => void;
+  onShow: (type: string, model: number) => void;
 }
 
 const TaskModal = forwardRef<TaskModalType>((_, ref) => {
@@ -30,9 +35,9 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
 
   const [model, setModel] = useState(0);
 
-  const onShow = (type: string,model: number) => {
+  const onShow = (type: string, model: number) => {
     setTaskModalMsg(type);
-    setModel(model)
+    setModel(model);
     setVisible(true);
   };
 
@@ -41,11 +46,22 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
     onShow,
   }));
 
+  const JoinTask = () => {
+    if (model === 0) {
+      // window.open("https://t.me/LionsClub");
+    } else {
+      // window.open("https://twitter.com/LionsClubX");
+    }
+  };
+
   return (
     <ActionSheet visible={visible} onCancel={onCancel}>
       <div style={{ padding: "16px 16px 160px" }}>
         <p>{TaskModalMsg}</p>
-        <div>Join</div>
+
+        <Button type="primary" round  onClick={JoinTask}>
+          Join
+        </Button>
       </div>
     </ActionSheet>
   );
