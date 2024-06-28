@@ -7,7 +7,7 @@ export default function Earn() {
   return (
     <>
       <div className="h-full w-full flex justify-center items-center flex-col">
-        <div className="my-20" onClick={() => taskRef.current?.onShow(' Join our TG channel',0)}>
+        <div className="my-[20px] " onClick={() => taskRef.current?.onShow(' Join our TG channel',0)}>
           Join our TG channel
         </div>
         <div onClick={() => taskRef.current?.onShow('Follow our X account',1)} >Follow our X account </div>
