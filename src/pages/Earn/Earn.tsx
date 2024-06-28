@@ -1,13 +1,63 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { ActionSheet, Button } from "react-vant";
+import { ActionSheet, Button, Image } from "react-vant";
+
+import bannerImg from "@/assets/image/earnBanner.png";
+import tgIcon from "@/assets/image/tg-icon.png";
+import twIcon from "@/assets/image/tw-icon.png";
+import pointImg from "@/assets/image/point.png";
+
+import styled from "styled-components";
+
+import { Arrow } from '@react-vant/icons';
+
+const TaskBox = styled.div`
+  border-radius: 23px;
+  opacity: 1;
+  background: #222430;
+  padding: 10px 18px;
+  box-sizing: border-box;
+  margin-top: 15px;
+  box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.25);
+  
+`;
 
 export default function Earn() {
   const taskRef = useRef<TaskModalType | null>(null);
 
   return (
     <>
-      <div className="h-full w-full flex justify-center items-center flex-col">
-        <div
+      <div className="h-full w-full flex justify-center items-center flex-col px-[25px]">
+        <div className="w-full flex justify-center items-center mt-[40px]">
+          <Image width="162" height="162" src={bannerImg} />
+        </div>
+        <div className="w-full">
+          <p>Task List</p>
+          <TaskBox className="flex justify-between items-center"  onClick={() => taskRef.current?.onShow(" Join our TG channel", 0)}>
+            <div className="flex items-center">
+              <Image src={tgIcon} width='40' />
+              <div className="ml-3">
+                <p>Join our TG channel</p>
+                <div className="flex items-center " >
+                  <Image src={pointImg} width='25' ></Image>+ 1000
+                </div>
+              </div>
+            </div>
+            <Arrow />
+          </TaskBox>
+          <TaskBox className="flex justify-between items-center" onClick={() => taskRef.current?.onShow("Follow our X account", 1)}>
+            <div className="flex items-center">
+              <Image src={twIcon} width='35'    />
+              <div className="ml-3">
+                <p>Join our TG channel</p>
+                <div className="flex items-center ">
+                  <Image src={pointImg} width='25' ></Image>+ 1000
+                </div>
+              </div>
+            </div>
+            <Arrow />
+          </TaskBox>
+        </div>
+        {/* <div
           className="my-[20px] "
           onClick={() => taskRef.current?.onShow(" Join our TG channel", 0)}
         >
@@ -15,7 +65,7 @@ export default function Earn() {
         </div>
         <div onClick={() => taskRef.current?.onShow("Follow our X account", 1)}>
           Follow our X account{" "}
-        </div>
+        </div> */}
       </div>
       <TaskModal ref={taskRef}></TaskModal>
     </>
@@ -59,7 +109,7 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
       <div style={{ padding: "16px 16px 160px" }}>
         <p>{TaskModalMsg}</p>
 
-        <Button type="primary" round  onClick={JoinTask}>
+        <Button type="primary" round onClick={JoinTask}>
           Join
         </Button>
       </div>

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-vant/icons": "^0.1.0",
     "@telegram-apps/telegram-ui": "^2.1.4",
     "@tma.js/sdk-react": "^2.2.5",
     "@tonconnect/ui-react": "^2.0.5",
@@ -19,9 +20,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.24.0",
-    "react-vant": "^3.3.5"
+    "react-vant": "^3.3.5",
+    "styled-components": "^6.1.11"
   },
   "devDependencies": {
+    "@types/node": "^20.14.9",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

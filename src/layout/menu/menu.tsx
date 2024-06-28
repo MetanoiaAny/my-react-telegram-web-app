@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Tabbar } from "react-vant";
 
 const Menu = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [defaultValue, setDefaultValue] = useState(
+  const [defaultValue] = useState(
     location.pathname.split("/")[2]
   );
   const changeRoute = (active: number | string) => {
