@@ -1,5 +1,8 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { ActionSheet, Button, Image } from "react-vant";
+// import { ActionSheet, Button, Image } from "react-vant";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
 
 import bannerImg from "@/assets/image/earnBanner.png";
 import tgIcon from "@/assets/image/tg-icon.png";
@@ -8,7 +11,6 @@ import pointImg from "@/assets/image/point.png";
 
 import styled from "styled-components";
 
-import { Arrow } from '@react-vant/icons';
 
 const TaskBox = styled.div`
   border-radius: 23px;
@@ -28,33 +30,33 @@ export default function Earn() {
     <>
       <div className="h-full w-full flex justify-center items-center flex-col px-[25px]">
         <div className="w-full flex justify-center items-center mt-[40px]">
-          <Image width="162" height="162" src={bannerImg} />
+          <img width="162" height="162" src={bannerImg} />
         </div>
         <div className="w-full">
           <p>Task List</p>
           <TaskBox className="flex justify-between items-center"  onClick={() => taskRef.current?.onShow(" Join our TG channel", 0)}>
             <div className="flex items-center">
-              <Image src={tgIcon} width='40' />
+              <img src={tgIcon} width='40' />
               <div className="ml-3">
                 <p>Join our TG channel</p>
                 <div className="flex items-center " >
-                  <Image src={pointImg} width='25' ></Image>+ 1000
+                  <img src={pointImg} width='25' ></img> <span className="mx-=2">+1000</span>
                 </div>
               </div>
             </div>
-            <Arrow />
+            <ArrowForwardIosIcon />
           </TaskBox>
           <TaskBox className="flex justify-between items-center" onClick={() => taskRef.current?.onShow("Follow our X account", 1)}>
             <div className="flex items-center">
-              <Image src={twIcon} width='35'    />
+              <img src={twIcon} width='35'    />
               <div className="ml-3">
                 <p>Join our TG channel</p>
                 <div className="flex items-center ">
-                  <Image src={pointImg} width='25' ></Image>+ 1000
+                  <img src={pointImg} width='25' ></img> <span className="mx-2">+1000</span>
                 </div>
               </div>
             </div>
-            <Arrow />
+            <ArrowForwardIosIcon />
           </TaskBox>
         </div>
         {/* <div
@@ -79,7 +81,7 @@ interface TaskModalType {
 
 const TaskModal = forwardRef<TaskModalType>((_, ref) => {
   const [visible, setVisible] = useState(false);
-  const onCancel = () => setVisible(false);
+  // const onCancel = () => setVisible(false);
 
   const [TaskModalMsg, setTaskModalMsg] = useState("");
 
@@ -105,14 +107,14 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
   };
 
   return (
-    <ActionSheet visible={visible} onCancel={onCancel}>
+    <Drawer  anchor="bottom" open={visible} onClose={() => setVisible(false)}>
       <div style={{ padding: "16px 16px 160px" }}>
         <p>{TaskModalMsg}</p>
 
-        <Button type="primary" round onClick={JoinTask}>
+        <Button variant="contained"  onClick={JoinTask}>
           Join
         </Button>
       </div>
-    </ActionSheet>
+    </Drawer>
   );
 });
