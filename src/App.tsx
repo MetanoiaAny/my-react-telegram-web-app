@@ -34,6 +34,8 @@ function App() {
   const initDataRaw = useLaunchParams();
   useEffect(() => {
     console.log(initData);
+    console.log(JSON.stringify(initData));  
+    
     console.log(initDataRaw);
   }, []);
 
