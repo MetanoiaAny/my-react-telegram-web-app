@@ -14,6 +14,12 @@ import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
 import { HashRouter } from "react-router-dom";
 
 import Container from "@mui/material/Container";
+// import {encrypt,PKey} from '@/utils/encrypt'
+import {InitUser} from '@/API/reuqest'
+
+
+
+
 function App() {
   const lp = useLaunchParams();
   const miniApp = useMiniApp();
@@ -35,11 +41,49 @@ function App() {
   const initData = useInitData();
   const initDataRaw = useLaunchParams();
   useEffect(() => {
-    console.log(initData);
-    console.log(JSON.stringify(initData));
+    console.log('initData',initData);
+    // console.log(JSON.stringify(initData));
 
-    console.log(initDataRaw);
+    console.log('initDataRaw',initDataRaw);
+
+    if (initDataRaw && initDataRaw.initDataRaw) {
+      Init(initDataRaw.initDataRaw);
+    }
+
+
   }, []);
+
+const Init = async(initData:string)=>{
+  const content = {
+    initData:initData,
+    recommender:''
+  }
+
+  const res = await InitUser({
+    content:JSON.stringify(content)
+  })
+
+  try {
+    console.log(res);
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+
+  // console.log(content);
+  
+
+  // const data = encrypt(PKey,JSON.stringify(content))
+  // console.log(data);
+  
+
+  // const keys = generateKeyPair();
+  // console.log(keys);
+}
+  
+
 
   return (
     <>

@@ -8,10 +8,15 @@ import { JSEncrypt } from 'jsencrypt';
 //   return { publicKey, privateKey };
 // };
 
+export const PKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCexmjnFVxFCc/4AWqyHV435ZgNT5p1lH9lk5210QENZGozi6NjLFSjrP2PeFKpm8vpybQh7obW2jOPQfUd/+gohIL80f+4bVRQpEq7caJRHdtv1lVCOhuS8hAYELoUFfzfi/hQStbOLcIZ2H3oKOjG1vGwd66DwLQUxuY2HL40ewIDAQAB'
+
+
 // 使用公钥加密消息
-export const encryptMessage = (publicKey: string, message: string): string | false => {
+export const encrypt = (publicKey: string, message: string): string | false => {
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(publicKey);
+  console.log(encrypt,message);
+  
   return encrypt.encrypt(message);
 };
 

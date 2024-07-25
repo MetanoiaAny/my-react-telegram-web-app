@@ -27,7 +27,7 @@ export default function Earn() {
 
   return (
     <>
-      <div className="h-full w-full flex justify-center items-center flex-col px-[25px]">
+      <div className="h-full w-full flex justify-center items-center flex-col px-[25px] text-white">
         <div className="w-full flex justify-center items-center mt-[40px]">
           <PointShadow $filter="blur(41px)" $shadowColor="rgba(247, 197, 62, 0.3)" className="w-[180px] h-[180px] absolute z-1"></PointShadow>
           <img width="162" height="162" src={bannerImg} className="z-20" />

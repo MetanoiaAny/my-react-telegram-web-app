@@ -22,8 +22,8 @@ const Wallet = () => {
           connect your wallet to access upcoming crypto features. Our team is
           Working hard to bring them to you soon!
         </p>
-        <p>{userFriendlyAddress}</p>
-        <p>{rawAddress}</p>
+        <p className="text-white">{userFriendlyAddress}</p>
+        <p className="text-white">{rawAddress}</p>
       </div>
       <TonConnectButton />
     </div>

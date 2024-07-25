@@ -28,7 +28,8 @@ const routers: RouteObject[] = [
       },{
         path: "Wallet",
         element: <Wallet></Wallet>,
-      }
+      },
+
     ],
   }
 ]

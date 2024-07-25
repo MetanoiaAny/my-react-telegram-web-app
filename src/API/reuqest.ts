@@ -8,3 +8,13 @@ export const getTwitter = async (params: {
 }) => {
     return await request.request('/twitter/code', 'GET', params)
 }
+
+
+
+
+
+export const InitUser = async (content: {
+    content: string
+}) => {
+    return await request.request('/user/enter', 'POST', content)
+}
