@@ -6,6 +6,8 @@ import { useRoutes, RouteObject,Navigate } from "react-router-dom";
 
 import Home from '@/pages/Home/Home'
 import Earn from '@/pages/Earn/Earn'
+import Wallet from '@/pages/Wallet/Wallet'
+
 
 const routers: RouteObject[] = [
   {
@@ -23,6 +25,9 @@ const routers: RouteObject[] = [
       {
         path: "Earn",
         element: <Earn></Earn>,
+      },{
+        path: "Wallet",
+        element: <Wallet></Wallet>,
       }
     ],
   }

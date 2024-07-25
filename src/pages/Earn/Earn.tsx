@@ -1,8 +1,8 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 // import { ActionSheet, Button, Image } from "react-vant";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
 
 import bannerImg from "@/assets/image/earnBanner.png";
 import tgIcon from "@/assets/image/tg-icon.png";
@@ -10,7 +10,7 @@ import twIcon from "@/assets/image/tw-icon.png";
 import pointImg from "@/assets/image/point.png";
 
 import styled from "styled-components";
-
+import { PointShadow } from "@/components/backgroundShadow";
 
 const TaskBox = styled.div`
   border-radius: 23px;
@@ -20,7 +20,6 @@ const TaskBox = styled.div`
   box-sizing: border-box;
   margin-top: 15px;
   box-shadow: 0px 4px 20px 7px rgba(0, 0, 0, 0.25);
-  
 `;
 
 export default function Earn() {
@@ -30,29 +29,38 @@ export default function Earn() {
     <>
       <div className="h-full w-full flex justify-center items-center flex-col px-[25px]">
         <div className="w-full flex justify-center items-center mt-[40px]">
-          <img width="162" height="162" src={bannerImg} />
+          <PointShadow $filter="blur(41px)" $shadowColor="rgba(247, 197, 62, 0.3)" className="w-[180px] h-[180px] absolute z-1"></PointShadow>
+          <img width="162" height="162" src={bannerImg} className="z-20" />
         </div>
         <div className="w-full">
           <p>Task List</p>
-          <TaskBox className="flex justify-between items-center"  onClick={() => taskRef.current?.onShow(" Join our TG channel", 0)}>
+          <TaskBox
+            className="flex justify-between items-center"
+            onClick={() => taskRef.current?.onShow(" Join our TG channel", 0)}
+          >
             <div className="flex items-center">
-              <img src={tgIcon} width='40' />
+              <img src={tgIcon} width="40" />
               <div className="ml-3">
                 <p>Join our TG channel</p>
-                <div className="flex items-center " >
-                  <img src={pointImg} width='25' ></img> <span className="mx-=2">+1000</span>
+                <div className="flex items-center ">
+                  <img src={pointImg} width="25"></img>{" "}
+                  <span className="mx-=2">+1000</span>
                 </div>
               </div>
             </div>
             <ArrowForwardIosIcon />
           </TaskBox>
-          <TaskBox className="flex justify-between items-center" onClick={() => taskRef.current?.onShow("Follow our X account", 1)}>
+          <TaskBox
+            className="flex justify-between items-center"
+            onClick={() => taskRef.current?.onShow("Follow our X account", 1)}
+          >
             <div className="flex items-center">
-              <img src={twIcon} width='35'    />
+              <img src={twIcon} width="35" />
               <div className="ml-3">
                 <p>Join our TG channel</p>
                 <div className="flex items-center ">
-                  <img src={pointImg} width='25' ></img> <span className="mx-2">+1000</span>
+                  <img src={pointImg} width="25"></img>{" "}
+                  <span className="mx-2">+1000</span>
                 </div>
               </div>
             </div>
@@ -107,11 +115,11 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
   };
 
   return (
-    <Drawer  anchor="bottom" open={visible} onClose={() => setVisible(false)}>
-      <div style={{ padding: "16px 16px 160px" }}>
-        <p>{TaskModalMsg}</p>
+    <Drawer anchor="bottom" open={visible} onClose={() => setVisible(false)}>
+      <div className="flex justify-center flex-col items-center px-10 min-h-[200px]">
+        <p className="my-5 text-base">{TaskModalMsg}</p>
 
-        <Button variant="contained"  onClick={JoinTask}>
+        <Button variant="contained" onClick={JoinTask}>
           Join
         </Button>
       </div>

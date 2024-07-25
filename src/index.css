@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+:root {
+    --rv-count-down-text-color:white;
+  }

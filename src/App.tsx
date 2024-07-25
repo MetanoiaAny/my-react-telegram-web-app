@@ -12,6 +12,8 @@ import {
 import { useEffect } from "react";
 import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
 import { HashRouter } from "react-router-dom";
+
+import Container from "@mui/material/Container";
 function App() {
   const lp = useLaunchParams();
   const miniApp = useMiniApp();
@@ -34,21 +36,25 @@ function App() {
   const initDataRaw = useLaunchParams();
   useEffect(() => {
     console.log(initData);
-    console.log(JSON.stringify(initData));  
-    
+    console.log(JSON.stringify(initData));
+
     console.log(initDataRaw);
   }, []);
 
   return (
     <>
-      <AppRoot
-        appearance={"dark"}
-        platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
-      >
-        <HashRouter>
-          <RenderRouter />
-        </HashRouter>
-      </AppRoot>
+      <Container fixed sx={{ paddingLeft:0, paddingRight:0 }} >
+        
+          <AppRoot
+            appearance={"dark"}
+            platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
+          >
+            <HashRouter>
+              <RenderRouter />
+            </HashRouter>
+          </AppRoot>
+        
+      </Container>
     </>
   );
 }

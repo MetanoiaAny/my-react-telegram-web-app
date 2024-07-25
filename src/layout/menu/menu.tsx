@@ -3,6 +3,9 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import '@/assets/icon/font1/iconfont.css'
+
 const Menu = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,7 +28,7 @@ const Menu = () => {
       onChange={(_, newValue) => {
         changeRoute(newValue);
       }}
-      sx={{ position: "fixed", bottom: 10, left: '50%', marginLeft:'-47%',right: 0 ,width:"95%" ,backgroundColor:'#181A4A',borderRadius:'10px'}}
+      sx={{ backgroundColor:'#181A4A',borderRadius:'10px',maxWidth:'1100px'}}
     >
       <BottomNavigationAction
         label="Home"
@@ -33,7 +36,10 @@ const Menu = () => {
         icon={<HomeIcon />}
         sx={{ color: "white" }}
       />
-      <BottomNavigationAction label="Earn" value={"Earn"} icon={<HomeIcon />} sx={{ color: "white" }} />
+      <BottomNavigationAction label="Earn" value={"Earn"} icon={
+        <span className="iconfont  icon-svg_coins"></span>
+      } sx={{ color: "white" }} />
+      <BottomNavigationAction label="Earn" value={"Wallet"} icon={<AccountBalanceWalletIcon />} sx={{ color: "white" }} />
     </BottomNavigation>
   );
 };
