@@ -79,7 +79,12 @@ function App() {
       recommender: "",
     };
 
+    console.log(content);
+    
+
     const data = encrypt(SM2Key, JSON.stringify(content));
+    console.log(data);
+    
 
     const res = await InitUser({
       content: data,
