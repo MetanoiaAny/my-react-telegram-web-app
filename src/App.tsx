@@ -16,6 +16,7 @@ import { HashRouter } from "react-router-dom";
 import Container from "@mui/material/Container";
 // import {encrypt,PKey} from '@/utils/encrypt'
 import {InitUser} from '@/API/reuqest'
+import { SM2Key, encrypt } from "./utils/crypto";
 
 
 
@@ -59,17 +60,21 @@ const Init = async(initData:string)=>{
     recommender:''
   }
 
-  const res = await InitUser({
-    content:JSON.stringify(content)
-  })
+  const data = encrypt(SM2Key,JSON.stringify(content))
 
-  try {
-    console.log(res);
+  console.log(data);
+  
+  // const res = await InitUser({
+  //   content:JSON.stringify(content)
+  // })
+
+  // try {
+  //   console.log(res);
     
-  } catch (error) {
-    console.log(error);
+  // } catch (error) {
+  //   console.log(error);
     
-  }
+  // }
 
 
   // console.log(content);
