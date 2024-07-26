@@ -15,7 +15,7 @@ import { HashRouter } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 // import {encrypt,PKey} from '@/utils/encrypt'
-import {InitUser} from '@/API/reuqest'
+
 import { SM2Key, encrypt } from "./utils/crypto";
 
 
