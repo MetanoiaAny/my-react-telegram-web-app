@@ -2,3 +2,4 @@
 
 
 declare module 'sm-crypto';
+declare module 'crypto-js'
