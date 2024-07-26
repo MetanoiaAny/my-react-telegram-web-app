@@ -10,13 +10,13 @@ export const generateKeyPair = () => {
 
 // 加密函数
 export const encrypt = (publicKey: string, data: string) => {
-  return sm2.doEncrypt(data, publicKey,1);
+  return sm2.doEncrypt(data, publicKey, 1);
 };
 
 // 解密函数
 export const decrypt = (privateKey: string, encryptedData: string) => {
   // return sm2.doDecrypt(encryptedData, privateKey, 'base64', 'utf8');
-  return  sm2.doDecrypt(encryptedData, privateKey)
+  return sm2.doDecrypt(encryptedData, privateKey)
 };
 
 
@@ -24,19 +24,33 @@ export const SM2Key = '04d0f5b3fdf7fe00bd90aa08f63c22b3f9136dfcad47393f909b7e3e1
 
 
 
-export const decryptDES = (encryptedText: string, key: string): string => {
+export const desDecrypt = (encryptedText: string, key: string): string => {
   const keyUtf8 = CryptoJS.enc.Utf8.parse(key);
-  // const ivUtf8 = CryptoJS.enc.Utf8.parse(iv);
-
-  try {
-    const decrypted = CryptoJS.DES.decrypt(encryptedText, keyUtf8, {
-      // iv: ivUtf8,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-    return decrypted.toString(CryptoJS.enc.Utf8);
-  } catch (error) {
-    console.error('Decryption error:', error);
-    return 'Decryption failed';
-  }
+  const decrypted = CryptoJS.DES.decrypt(
+    {
+      ciphertext: CryptoJS.enc.Base64.parse(encryptedText)
+    },
+    keyUtf8,
+    {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    }
+  );
+  return decrypted.toString(CryptoJS.enc.Utf8);
 };
+
+
+export const decryptDes = (message: string, key: string) => {
+  const keyHex = CryptoJS.enc.Utf8.parse(key)
+  const decrypted = CryptoJS.DES.decrypt(
+    {
+      ciphertext: CryptoJS.enc.Hex.parse(message)
+    }, // 若 message 是 base64 格式，则无需转16进制hex，直接传入 message 即可
+    keyHex,
+    {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    }
+  )
+  return decrypted.toString(CryptoJS.enc.Utf8)
+}

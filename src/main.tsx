@@ -6,6 +6,7 @@ import WebApp from "@twa-dev/sdk";
 import eruda from "eruda";
 import Root from '@/layout/Root'
 
+
 import '@telegram-apps/telegram-ui/dist/styles.css';
 
 import './mockEnv.ts';

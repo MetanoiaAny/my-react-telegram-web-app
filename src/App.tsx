@@ -16,16 +16,20 @@ import { HashRouter } from "react-router-dom";
 import Container from "@mui/material/Container";
 // import {encrypt,PKey} from '@/utils/encrypt'
 
-import { SM2Key, encrypt, decryptDES } from "./utils/crypto";
+import { SM2Key, encrypt, decryptDes } from "./utils/crypto";
 import { InitUser } from "./API/reuqest";
 import { hooks } from "react-vant";
 import { Notify } from "react-vant";
+import {setUser} from '@/redux/modules/UserInfo/User'
+import {useAppDispatch} from '@/redux/index'
 
 function App() {
   const lp = useLaunchParams();
   const miniApp = useMiniApp();
   const themeParams = useThemeParams();
   const viewport = useViewport();
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     return bindMiniAppCSSVars(miniApp, themeParams);
@@ -57,6 +61,8 @@ function App() {
 
   hooks.useMount(() => {
     // console.log(initData?.user?.id,);
+    console.log(initData?.user);
+    
 
     if (initDataRaw && initDataRaw.initDataRaw  && initData?.user?.id !== undefined) {
       Init(initDataRaw.initDataRaw, initData?.user?.id);
@@ -64,42 +70,32 @@ function App() {
   });
 
   const Init = async (initData: string, UserId: number) => {
-    const _initData =initData
+    // const _initData =initData
 
-    const KeyId = String(UserId);
+    // const KeyId = String(UserId);
 
 
-    // const KeyId = '7143775970'
-    // const _initData =
-    //   "query_id=AAHiXs0pAwAAAOJezSmVUkzQ&user=%7B%22id%22%3A7143775970%2C%22first_name%22%3A%22outcast%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22fragile173%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1721960645&hash=06770c3a68fc69be88b9e65ea30de8df41a11d4752c9a955e732954d5eac2f26"
+    const KeyId = '7143775970'
+    const _initData =
+      "query_id=AAHiXs0pAwAAAOJezSmVUkzQ&user=%7B%22id%22%3A7143775970%2C%22first_name%22%3A%22outcast%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22fragile173%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1721960645&hash=06770c3a68fc69be88b9e65ea30de8df41a11d4752c9a955e732954d5eac2f26"
 
     const content = {
       // initData: initData,
       initData: _initData,
       recommender: "",
     };
-
-    console.log(content);
-    
-
     const data = encrypt(SM2Key, JSON.stringify(content));
-    console.log(data);
-    
-
     const res = await InitUser({
       content: data,
     });
-
-
     try {
-      console.log(res);
-
       if (res.code == 1) {
-        console.log(res.data, KeyId);
-        
-        const UserInfo = decryptDES(res.data, KeyId);
-        console.log(UserInfo);
-        
+        const decrypt_UserInfo = decryptDes(res.data, KeyId);
+        const _UserInfo = JSON.parse(decrypt_UserInfo)
+        dispatch(setUser({
+          ..._UserInfo,
+          id:UserId
+        }))
       } else {
         Notify.show({ type: "danger", message: res.msg });
       }
@@ -107,13 +103,7 @@ function App() {
       console.log(error);
     }
 
-    // console.log(content);
 
-    // const data = encrypt(PKey,JSON.stringify(content))
-    // console.log(data);
-
-    // const keys = generateKeyPair();
-    // console.log(keys);
   };
 
   return (

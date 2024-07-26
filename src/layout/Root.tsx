@@ -1,10 +1,11 @@
-import { SDKProvider } from '@tma.js/sdk-react';
-import { TonConnectUIProvider } from '@tonconnect/ui-react';
-import { type FC, useMemo } from 'react';
+import { SDKProvider } from "@tma.js/sdk-react";
+import { TonConnectUIProvider } from "@tonconnect/ui-react";
+import { type FC, useMemo } from "react";
 
 import App from "@/App";
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Provider } from "react-redux";
+import store from "@/redux/index";
 const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
   <div>
     <p>An unhandled error occurred:</p>
@@ -12,9 +13,9 @@ const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
       <code>
         {error instanceof Error
           ? error.message
-          : typeof error === 'string'
-            ? error
-            : JSON.stringify(error)}
+          : typeof error === "string"
+          ? error
+          : JSON.stringify(error)}
       </code>
     </blockquote>
   </div>
@@ -23,9 +24,9 @@ const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
 const Inner: FC = () => {
   // const debug = useLaunchParams().startParam === 'debug';
   const manifestUrl = useMemo(() => {
-    return new URL('tonconnect-manifest.json', window.location.href).toString();
+    return new URL("tonconnect-manifest.json", window.location.href).toString();
   }, []);
-  
+
   // Enable debug mode to see all the methods sent and events received.
   // useEffect(() => {
   //   if (debug) {
@@ -34,18 +35,20 @@ const Inner: FC = () => {
   // }, [debug]);
 
   return (
-    <TonConnectUIProvider manifestUrl={manifestUrl} >
-      <SDKProvider acceptCustomStyles debug>
-        <App/>
-      </SDKProvider>
-    </TonConnectUIProvider>
+    <Provider store={store}>
+      <TonConnectUIProvider manifestUrl={manifestUrl}>
+        <SDKProvider acceptCustomStyles debug>
+          <App />
+        </SDKProvider>
+      </TonConnectUIProvider>
+    </Provider>
   );
 };
 
 export default function Root() {
   return (
     <ErrorBoundary fallback={ErrorBoundaryError}>
-      <Inner/>
+      <Inner />
     </ErrorBoundary>
   );
 }
