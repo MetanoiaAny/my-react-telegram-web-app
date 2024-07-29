@@ -8,9 +8,13 @@ import bannerImg from "@/assets/image/earnBanner.png";
 import tgIcon from "@/assets/image/tg-icon.png";
 import twIcon from "@/assets/image/tw-icon.png";
 import pointImg from "@/assets/image/point.png";
+import successImg from "@/assets/image/success.webp";
 
 import styled from "styled-components";
 import { PointShadow } from "@/components/backgroundShadow";
+import { useAppSelector } from "@/redux";
+
+
 
 const TaskBox = styled.div`
   border-radius: 23px;
@@ -24,12 +28,18 @@ const TaskBox = styled.div`
 
 export default function Earn() {
   const taskRef = useRef<TaskModalType | null>(null);
-
+  const { joinGroup ,isfollow} = useAppSelector((state) => state.User);
+  console.log(isfollow);
+  
   return (
     <>
       <div className="h-full w-full flex justify-center items-center flex-col px-[25px] text-white">
         <div className="w-full flex justify-center items-center mt-[40px]">
-          <PointShadow $filter="blur(41px)" $shadowColor="rgba(247, 197, 62, 0.3)" className="w-[180px] h-[180px] absolute z-1"></PointShadow>
+          <PointShadow
+            $filter="blur(41px)"
+            $shadowColor="rgba(247, 197, 62, 0.3)"
+            className="w-[180px] h-[180px] absolute z-1"
+          ></PointShadow>
           <img width="162" height="162" src={bannerImg} className="z-20" />
         </div>
         <div className="w-full">
@@ -48,7 +58,10 @@ export default function Earn() {
                 </div>
               </div>
             </div>
-            <ArrowForwardIosIcon />
+            {
+              joinGroup===2 ? <img src={successImg} className="w-[25px]" /> :<ArrowForwardIosIcon />
+            }
+            
           </TaskBox>
           <TaskBox
             className="flex justify-between items-center"
@@ -64,7 +77,7 @@ export default function Earn() {
                 </div>
               </div>
             </div>
-            <ArrowForwardIosIcon />
+            {isfollow==2 ? <img src={successImg} className="w-[25px]" /> :<ArrowForwardIosIcon />}
           </TaskBox>
         </div>
         {/* <div
@@ -97,6 +110,8 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
 
   const onShow = (type: string, model: number) => {
     setTaskModalMsg(type);
+    console.log(model);
+
     setModel(model);
     setVisible(true);
   };
@@ -108,18 +123,34 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
 
   const JoinTask = () => {
     if (model === 0) {
-      // window.open("https://t.me/LionsClub");
+      window.open("https://t.me/+ViIwy503S7szMmNl");
     } else {
       // window.open("https://twitter.com/LionsClubX");
     }
   };
 
   return (
-    <Drawer anchor="bottom" open={visible} onClose={() => setVisible(false)}>
-      <div className="flex justify-center flex-col items-center px-10 min-h-[200px]">
-        <p className="my-5 text-base">{TaskModalMsg}</p>
+    <Drawer
+      anchor="bottom"
+      open={visible}
+      onClose={() => setVisible(false)}
+      sx={{ "& .MuiDrawer-paper": { backgroundColor: "#000" } }}
+    >
+      <div className="text-white flex justify-center flex-col items-center px-10 min-h-[260px]  border border-solid border-[#fff] rounded-t-3xl shadow-gray-200">
+        <div className="my-2">
+          {model === 0 ? (
+            <img src={tgIcon} className="w-[50px]" />
+          ) : (
+            <img src={twIcon} className="w-[50px]" />
+          )}
+        </div>
+        <p className="mb-5 text-xl">{TaskModalMsg}</p>
 
-        <Button variant="contained" onClick={JoinTask}>
+        <Button
+          variant="contained"
+          onClick={JoinTask}
+          sx={{ borderRadius: "10px", padding: "8px 40px", color: "#fff" }}
+        >
           Join
         </Button>
       </div>

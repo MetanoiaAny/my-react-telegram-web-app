@@ -92,6 +92,11 @@ function App() {
       if (res.code == 1) {
         const decrypt_UserInfo = decryptDes(res.data, KeyId);
         const _UserInfo = JSON.parse(decrypt_UserInfo)
+        console.log({
+          ..._UserInfo,
+          // id:UserId
+        });
+        
         dispatch(setUser({
           ..._UserInfo,
           id:UserId
