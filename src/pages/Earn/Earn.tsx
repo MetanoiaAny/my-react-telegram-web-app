@@ -1,4 +1,10 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 // import { ActionSheet, Button, Image } from "react-vant";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Drawer from "@mui/material/Drawer";
@@ -14,7 +20,8 @@ import styled from "styled-components";
 import { PointShadow } from "@/components/backgroundShadow";
 import { useAppSelector } from "@/redux";
 
-
+import { useLocation } from "react-router-dom";
+import { getTwitter } from "@/API/reuqest";
 
 const TaskBox = styled.div`
   border-radius: 23px;
@@ -28,9 +35,39 @@ const TaskBox = styled.div`
 
 export default function Earn() {
   const taskRef = useRef<TaskModalType | null>(null);
-  const { joinGroup ,isfollow} = useAppSelector((state) => state.User);
-  console.log(isfollow);
-  
+  const { joinGroup, isfollow, token } = useAppSelector((state) => state.User);
+
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const stateParam = params.get("state");
+    const codeParam = params.get("code");
+    if (stateParam && codeParam) {
+      sendTwitter(codeParam, stateParam);
+    }
+  }, [token]);
+
+  const sendTwitter = async (code: string, state: string) => {
+    console.log(token);
+    
+    if (token==="") return  
+    try {
+      const res = await getTwitter(
+        {
+          code,
+          state,
+        },
+        token
+      );
+      console.log(res);
+      if (res.code===1&& res.msg=='Success') {
+        
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="h-full w-full flex justify-center items-center flex-col px-[25px] text-white">
@@ -58,10 +95,11 @@ export default function Earn() {
                 </div>
               </div>
             </div>
-            {
-              joinGroup===2 ? <img src={successImg} className="w-[25px]" /> :<ArrowForwardIosIcon />
-            }
-            
+            {joinGroup === 2 ? (
+              <img src={successImg} className="w-[25px]" />
+            ) : (
+              <ArrowForwardIosIcon />
+            )}
           </TaskBox>
           <TaskBox
             className="flex justify-between items-center"
@@ -77,7 +115,11 @@ export default function Earn() {
                 </div>
               </div>
             </div>
-            {isfollow==2 ? <img src={successImg} className="w-[25px]" /> :<ArrowForwardIosIcon />}
+            {isfollow == 2 ? (
+              <img src={successImg} className="w-[25px]" />
+            ) : (
+              <ArrowForwardIosIcon />
+            )}
           </TaskBox>
         </div>
         {/* <div
@@ -99,6 +141,9 @@ export default function Earn() {
 interface TaskModalType {
   onShow: (type: string, model: number) => void;
 }
+
+const X_url =
+  "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=TzQtRXNRV0VjREFzZlYzYm9mQTk6MTpjaQ&redirect_uri=https%3A%2F%2Fforestbear.io%2FtwitterTon&scope=offline.access+tweet.read+users.read+follows.read+follows.write&state=0ioze5m20493ny2&code_challenge=0ioze5m20493ny2&code_challenge_method=plain";
 
 const TaskModal = forwardRef<TaskModalType>((_, ref) => {
   const [visible, setVisible] = useState(false);
@@ -125,7 +170,7 @@ const TaskModal = forwardRef<TaskModalType>((_, ref) => {
     if (model === 0) {
       window.open("https://t.me/+ViIwy503S7szMmNl");
     } else {
-      // window.open("https://twitter.com/LionsClubX");
+      window.open(X_url);
     }
   };
 

@@ -16,8 +16,8 @@ interface ResponseData {
 interface RequestConfig {
   showLoading?: boolean; // 是否显示 loading 状态
   headers?: {
-    address: string;
-    token: string;
+    address?: string;
+    Authorization?: string;
   }; // 请求头配置
   token?: string; // 添加 token 字段
   address?: string;
@@ -84,7 +84,7 @@ class Request {
     data?: any,
     config?: RequestConfig
   ): Promise<T> {
-    const { showLoading, headers, token, address } = config || {}
+    const { showLoading, headers, Authorization, address } = config || {}
     if (showLoading) {
       // 显示 loading 状态
     }
@@ -102,14 +102,17 @@ class Request {
     }
 
     // 使用类型断言来确保 headers 的类型
-    const typedHeaders = requestConfig.headers as { address?: string; token?: string }
+    const typedHeaders = requestConfig.headers as { address?: string; Authorization?: string }
+
+    console.log(config);
+    
 
     if (address) {
       typedHeaders.address = address
     }
 
-    if (token) {
-      typedHeaders.token = token
+    if (Authorization) {
+      typedHeaders.Authorization = Authorization
     }
 
     return new Promise((resolve, reject) => {

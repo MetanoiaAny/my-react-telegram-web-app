@@ -10,6 +10,8 @@ import speedLine from '@/assets/image/speedLine.webp'
 import { PointShadow } from "@/components/backgroundShadow";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { onContract } from "@/Ton/useContract";
+import { useEffect } from "react";
 
 interface StyledProps {
   $images?: string;
@@ -38,6 +40,13 @@ const TopMenuDiv = styled.div`
 
 export default function Home() {
   const navigate = useNavigate();
+
+
+
+  useEffect(() => {
+    // Ton_get()
+    onContract()
+  }, []);
 
   const onRouteRank = () => {
     navigate("/Lions/Rank");
