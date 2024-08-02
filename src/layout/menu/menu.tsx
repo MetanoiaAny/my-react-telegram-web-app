@@ -46,7 +46,7 @@ const Menu = () => {
 
   const changeRoute = (active: string) => {
     setValue(active);
-    navigate(`Lions/${active}`);
+    navigate(`/Lions/${active}`);
   };
 
   return (

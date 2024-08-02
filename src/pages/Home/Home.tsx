@@ -126,9 +126,9 @@ export default function Home() {
             >
               {(timeData) => (
                 <>
-                  <div className="CountDown mx-2">{timeData.minutes}</div>
+                  <div className="CountDown mx-2 text-white">{timeData.minutes}</div>
                   <div className="colon">:</div>
-                  <div className="CountDown mx-2">{timeData.seconds}</div>
+                  <div className="CountDown mx-2 text-white">{timeData.seconds}</div>
                 </>
               )}
             </CountDown>

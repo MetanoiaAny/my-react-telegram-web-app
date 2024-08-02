@@ -9,9 +9,9 @@ import {
   useThemeParams,
   useViewport,
 } from "@tma.js/sdk-react";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 // import {encrypt,PKey} from '@/utils/encrypt'
@@ -20,8 +20,9 @@ import { SM2Key, encrypt, decryptDes } from "./utils/crypto";
 import { InitUser } from "./API/reuqest";
 import { hooks } from "react-vant";
 import { Notify } from "react-vant";
-import {setUser} from '@/redux/modules/UserInfo/User'
-import {useAppDispatch} from '@/redux/index'
+import { setUser } from "@/redux/modules/UserInfo/User";
+import { useAppDispatch } from "@/redux/index";
+import { LinearProgress } from "@mui/material";
 
 function App() {
   const lp = useLaunchParams();
@@ -61,21 +62,22 @@ function App() {
 
   hooks.useMount(() => {
     // console.log(initData?.user?.id,);
-    console.log(initData,'initData');
-    console.log(initDataRaw,'initDataRaw');
-    
-    
+    console.log(initData, "initData");
+    console.log(initDataRaw, "initDataRaw");
 
-    if (initDataRaw && initDataRaw.initDataRaw  && initData?.user?.id !== undefined) {
+    if (
+      initDataRaw &&
+      initDataRaw.initDataRaw &&
+      initData?.user?.id !== undefined
+    ) {
       Init(initDataRaw.initDataRaw, initData?.user?.id);
     }
   });
 
   const Init = async (initData: string, UserId: number) => {
-    const _initData =initData
+    const _initData = initData;
 
     const KeyId = String(UserId);
-
 
     // const KeyId = '7143775970'
     // const _initData =
@@ -91,28 +93,26 @@ function App() {
       content: data,
     });
     try {
-
-      
       if (res.code == 1) {
+        const decrypt_UserInfo = decryptDes(
+          res.data,
+          String(KeyId) + "tongame"
+        );
 
-        const decrypt_UserInfo = decryptDes(res.data, String(KeyId)+'tongame');
-
-        
         const _UserInfo = JSON.parse(decrypt_UserInfo);
 
-        
-        dispatch(setUser({
-          ..._UserInfo,
-          id:KeyId
-        }))
+        dispatch(
+          setUser({
+            ..._UserInfo,
+            id: KeyId,
+          })
+        );
       } else {
         Notify.show({ type: "danger", message: res.msg });
       }
     } catch (error) {
       console.log(error);
     }
-
-
   };
 
   return (
@@ -122,8 +122,10 @@ function App() {
           appearance={"dark"}
           platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
         >
-          <BrowserRouter basename="/">
-            <RenderRouter />
+          <BrowserRouter basename="/my-react-telegram-web-app">
+            <Suspense fallback={<LinearProgress />}>
+              <RenderRouter />
+            </Suspense>
           </BrowserRouter>
         </AppRoot>
       </Container>
