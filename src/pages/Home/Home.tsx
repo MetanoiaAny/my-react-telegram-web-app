@@ -95,7 +95,7 @@ export default function Home() {
             <p>0</p>
           </div>
           <div className="text-sm flex justify-center items-center flex-col min-w-[120px] h-full">
-            <p className="text-[#999999]"> My integral</p>
+            <p className="text-[#999999]"> My Ton:</p>
             <TopDivider className="my-1.5"></TopDivider>
             <p>{TonBalance}</p>
           </div>
@@ -166,7 +166,7 @@ export default function Home() {
           </div>
           <div className="flex items-center justify-center mt-4 relative  w-full">
             <img src={TokenImg} className="w-[35px] " alt="" />
-            <p className="text-white text-3xl">20000</p>
+            <p className="text-white text-3xl">0</p>
             <PointShadow
               $filter="blur(92px)"
               $shadowColor="linear-gradient(177deg, rgba(7, 229, 255, 0) -26%, #07A8FF 24%);"
