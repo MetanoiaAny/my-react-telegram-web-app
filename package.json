@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://forestbear.io/tongame",
+  "homepage": "/my-react-telegram-web-app",
   "scripts": {
     "dev": "vite --host",
     "build": " vite build",
