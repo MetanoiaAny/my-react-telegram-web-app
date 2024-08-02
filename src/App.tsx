@@ -11,7 +11,7 @@ import {
 } from "@tma.js/sdk-react";
 import { Suspense, useEffect } from "react";
 import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
-import { BrowserRouter, } from "react-router-dom";
+import { HashRouter, } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 // import {encrypt,PKey} from '@/utils/encrypt'
@@ -122,11 +122,11 @@ function App() {
           appearance={"dark"}
           platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
         >
-          <BrowserRouter >
+          <HashRouter >
             <Suspense fallback={<LinearProgress />}>
               <RenderRouter />
             </Suspense>
-          </BrowserRouter>
+          </HashRouter>
         </AppRoot>
       </Container>
     </>
