@@ -124,7 +124,7 @@ export default function Earn() {
                 <p>Join our TG channel</p>
                 <div className="flex items-center ">
                   <img src={pointImg} width="25"></img>{" "}
-                  <span className="mx-=2">+1000</span>
+                  <span className="mx-=2">+5000</span>
                 </div>
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function Earn() {
                 <p>Join our TG channel</p>
                 <div className="flex items-center ">
                   <img src={pointImg} width="25"></img>{" "}
-                  <span className="mx-2">+1000</span>
+                  <span className="mx-2">+3000</span>
                 </div>
               </div>
             </div>
