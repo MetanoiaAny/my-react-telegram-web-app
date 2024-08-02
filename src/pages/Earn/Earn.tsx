@@ -182,7 +182,7 @@ interface TaskModalProps {
 
 
 const X_url =
-  "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=TzQtRXNRV0VjREFzZlYzYm9mQTk6MTpjaQ&redirect_uri=https%3A%2F%2Fforestbear.io%2FtwitterTon&scope=offline.access+tweet.read+users.read+follows.read+follows.write&state=0ioze5m20493ny2&code_challenge=0ioze5m20493ny2&code_challenge_method=plain";
+  "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=TzQtRXNRV0VjREFzZlYzYm9mQTk6MTpjaQ&redirect_uri=https%3A%2F%2Fforestbear.io%2Ftongame%2F#/Lions/Earn&scope=offline.access+tweet.read+users.read+follows.read+follows.write&state=0ioze5m20493ny2&code_challenge=0ioze5m20493ny2&code_challenge_method=plain";
 
 const TaskModal = forwardRef<TaskModalType,TaskModalProps>(
   ({ twitterCode,onCheck }, ref) => {

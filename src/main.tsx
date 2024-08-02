@@ -14,7 +14,7 @@ import './mockEnv.ts';
 import "./index.css";
 WebApp.ready();
 
-eruda.init();
+// eruda.init();
 
 
 
