@@ -122,7 +122,7 @@ function App() {
           appearance={"dark"}
           platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
         >
-          <BrowserRouter basename="/my-react-telegram-web-app">
+          <BrowserRouter >
             <Suspense fallback={<LinearProgress />}>
               <RenderRouter />
             </Suspense>
