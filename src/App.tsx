@@ -122,7 +122,7 @@ function App() {
           appearance={"dark"}
           platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
         > */}
-          <BrowserRouter>
+          <BrowserRouter basename="/tongame">
             <Suspense fallback={<LinearProgress />}>
               <RenderRouter />
             </Suspense>
