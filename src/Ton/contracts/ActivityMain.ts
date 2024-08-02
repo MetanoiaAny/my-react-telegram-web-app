@@ -70,7 +70,7 @@ export type Context = {
     bounced: boolean;
     sender: Address;
     value: bigint;
-    raw: Slice;
+    raw: Cell;
 }
 
 export function storeContext(src: Context) {
@@ -79,7 +79,7 @@ export function storeContext(src: Context) {
         b_0.storeBit(src.bounced);
         b_0.storeAddress(src.sender);
         b_0.storeInt(src.value, 257);
-        b_0.storeRef(src.raw.asCell());
+        b_0.storeRef(src.raw);
     };
 }
 
@@ -88,7 +88,7 @@ export function loadContext(slice: Slice) {
     let _bounced = sc_0.loadBit();
     let _sender = sc_0.loadAddress();
     let _value = sc_0.loadIntBig(257);
-    let _raw = sc_0.loadRef().asSlice();
+    let _raw = sc_0.loadRef();
     return { $$type: 'Context' as const, bounced: _bounced, sender: _sender, value: _value, raw: _raw };
 }
 
@@ -96,7 +96,7 @@ function loadTupleContext(source: TupleReader) {
     let _bounced = source.readBoolean();
     let _sender = source.readAddress();
     let _value = source.readBigNumber();
-    let _raw = source.readCell().asSlice();
+    let _raw = source.readCell();
     return { $$type: 'Context' as const, bounced: _bounced, sender: _sender, value: _value, raw: _raw };
 }
 
@@ -105,7 +105,7 @@ function storeTupleContext(source: Context) {
     builder.writeBoolean(source.bounced);
     builder.writeAddress(source.sender);
     builder.writeNumber(source.value);
-    builder.writeSlice(source.raw.asCell());
+    builder.writeSlice(source.raw);
     return builder.build();
 }
 
@@ -606,7 +606,6 @@ function dictValueParserDoEnd(): DictionaryValue<DoEnd> {
 export type ActivityData = {
     $$type: 'ActivityData';
     activityId: bigint;
-    minValue: bigint;
     totalAmount: bigint;
     activityMain: Address;
     lastTime: bigint;
@@ -619,16 +618,13 @@ export function storeActivityData(src: ActivityData) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeInt(src.activityId, 257);
-        b_0.storeInt(src.minValue, 257);
         b_0.storeInt(src.totalAmount, 257);
+        b_0.storeAddress(src.activityMain);
         let b_1 = new Builder();
-        b_1.storeAddress(src.activityMain);
         b_1.storeInt(src.lastTime, 257);
         b_1.storeAddress(src.lastAddress);
-        let b_2 = new Builder();
-        b_2.storeInt(src.duration, 257);
-        b_2.storeBit(src.isEnd);
-        b_1.storeRef(b_2.endCell());
+        b_1.storeInt(src.duration, 257);
+        b_1.storeBit(src.isEnd);
         b_0.storeRef(b_1.endCell());
     };
 }
@@ -636,34 +632,30 @@ export function storeActivityData(src: ActivityData) {
 export function loadActivityData(slice: Slice) {
     let sc_0 = slice;
     let _activityId = sc_0.loadIntBig(257);
-    let _minValue = sc_0.loadIntBig(257);
     let _totalAmount = sc_0.loadIntBig(257);
+    let _activityMain = sc_0.loadAddress();
     let sc_1 = sc_0.loadRef().beginParse();
-    let _activityMain = sc_1.loadAddress();
     let _lastTime = sc_1.loadIntBig(257);
     let _lastAddress = sc_1.loadAddress();
-    let sc_2 = sc_1.loadRef().beginParse();
-    let _duration = sc_2.loadIntBig(257);
-    let _isEnd = sc_2.loadBit();
-    return { $$type: 'ActivityData' as const, activityId: _activityId, minValue: _minValue, totalAmount: _totalAmount, activityMain: _activityMain, lastTime: _lastTime, lastAddress: _lastAddress, duration: _duration, isEnd: _isEnd };
+    let _duration = sc_1.loadIntBig(257);
+    let _isEnd = sc_1.loadBit();
+    return { $$type: 'ActivityData' as const, activityId: _activityId, totalAmount: _totalAmount, activityMain: _activityMain, lastTime: _lastTime, lastAddress: _lastAddress, duration: _duration, isEnd: _isEnd };
 }
 
 function loadTupleActivityData(source: TupleReader) {
     let _activityId = source.readBigNumber();
-    let _minValue = source.readBigNumber();
     let _totalAmount = source.readBigNumber();
     let _activityMain = source.readAddress();
     let _lastTime = source.readBigNumber();
     let _lastAddress = source.readAddress();
     let _duration = source.readBigNumber();
     let _isEnd = source.readBoolean();
-    return { $$type: 'ActivityData' as const, activityId: _activityId, minValue: _minValue, totalAmount: _totalAmount, activityMain: _activityMain, lastTime: _lastTime, lastAddress: _lastAddress, duration: _duration, isEnd: _isEnd };
+    return { $$type: 'ActivityData' as const, activityId: _activityId, totalAmount: _totalAmount, activityMain: _activityMain, lastTime: _lastTime, lastAddress: _lastAddress, duration: _duration, isEnd: _isEnd };
 }
 
 function storeTupleActivityData(source: ActivityData) {
     let builder = new TupleBuilder();
     builder.writeNumber(source.activityId);
-    builder.writeNumber(source.minValue);
     builder.writeNumber(source.totalAmount);
     builder.writeAddress(source.activityMain);
     builder.writeNumber(source.lastTime);
@@ -789,34 +781,30 @@ function dictValueParserAccountInfoBuy(): DictionaryValue<AccountInfoBuy> {
     }
 }
 
- type Activity_init_args = {
-    $$type: 'Activity_init_args';
+ type ActivityMain_init_args = {
+    $$type: 'ActivityMain_init_args';
     owner: Address;
-    activityMain: Address;
-    activityId: bigint;
 }
 
-function initActivity_init_args(src: Activity_init_args) {
+function initActivityMain_init_args(src: ActivityMain_init_args) {
     return (builder: Builder) => {
         let b_0 = builder;
         b_0.storeAddress(src.owner);
-        b_0.storeAddress(src.activityMain);
-        b_0.storeInt(src.activityId, 257);
     };
 }
 
-async function Activity_init(owner: Address, activityMain: Address, activityId: bigint) {
-    const __code = Cell.fromBase64('te6ccgECGgEABZwAART/APSkE/S88sgLAQIBYgIDA5rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVGNs88uCCyPhDAcx/AcoAVYDbPMntVBMEBQIBIA4PA9ztou37AZIwf+BwIddJwh+VMCDXCx/eIIIQ0iOGT7qOMjDTHwGCENIjhk+68uCBgQEB1wCBAQHXAIEBAdcAVSBsEzQ5OYERTfhCUnDHBfL0GBd/4CCCEB3WUUO64wIgghCI0mt+uuMCwACRMOMNcAYHCAH2UImBAQHPABaBAQHPABSBAQHPAMhQAyDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFgEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYSgQEBzwDIUAMg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYTDQHOMNMfAYIQHdZRQ7ry4IGBAQHXAIEBAdcAWWwS+EFvJBNfA4IA87Aks/L0ggDYQlMcvJNSMrqSMXDi8vQlwwCWU1Og+CO7kXDinVuCAPOwU0Kg+CO88vSOjTQ0UWOg+CP4QkhU2zzifwkBdjDTHwGCEIjSa3668uCBgQEB1wABMVuBEU34QiPHBfL0gWlQUzGg+CO78vR/+EJ/cIEAghAjbW1t2zx/CwBo+QGC8BewhoOzj5TyDTKxJh6P5dFy8lJulv67fZtORoYTwzW2up34QW8kE18DF6AGf9sx4AP2MPhCGhkYFxYVFEMw2zxccFnIcAHLAXMBywFwAcsAEszMyfkAyHIBywFwAcsAEsoHy//J0CDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhwcIBCD/gjyFmCEJZxO2pQA8sfgQEBzwCBAQHPAMkQNkVAED9ZEEYQRds8GAsKAARVBwHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wAMAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAByBAQHPABPKAMlYzMkBzAIBIBARABG+FfdqJoaQAAwCFbtInbPNs8bJhvCIExICTbhWEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCI2zxVCNs8bJGBMUABBUd4ZUeGVTdgLQ7UTQ1AH4Y9IAAY6E2zxsGeD4KNcLCoMJuvLgifpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXAFUgA9FY2zwVFgGG2zxwWchwAcsBcwHLAXABywASzMzJ+QDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiBgB9IEBAdcAgQEB1wCBAQHXANQB0PpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXANQw0PpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgBFwAccPgoVHERBxBWEEVQM3AAHIEBAdcA0gAwEGkQaBBnAQ74Q/goEts8GQDWAtD0BDBtAYFw5gGAEPQPb6Hy4IcBgXDmIgKAEPQXyAHI9ADJAcxwAcoAQANZINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFsk=');
-    const __system = Cell.fromBase64('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');
+async function ActivityMain_init(owner: Address) {
+    const __code = Cell.fromBase64('te6ccgECHQEABKcAART/APSkE/S88sgLAQIBYgIDAtzQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxa2zzy4ILI+EMBzH8BygBZAoEBAc8AASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFsntVBcEAgEgCwwC3AGSMH/gcCHXScIflTAg1wsf3iCCEAvmUw+6jp4w0x8BghAL5lMPuvLggYEBAdcAgQEB1wBZbBLbPH/gghCUapi2uo6n0x8BghCUapi2uvLggdM/ATHIAYIQr/kPV1jLH8s/yfhCAXBt2zx/4DBwBQYD8FrbPCGkURLbPFxwWchwAcsBcwHLAXABywASzMzJ+QDIcgHLAXABywASygfL/8nQINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiHBwUHmAQgnIVSCCENIjhk9QBMsfEoEBAc8AgQEBzwCBAQHPAMkWFRBIEDdQcgcaCAE6bW0ibrOZWyBu8tCAbyIBkTLiECRwAwSAQlAj2zwJABL4QlIQxwXy4IQBDhBGEEXbPAEJAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AAoAmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwCEb4o7tnm2eNhDBcNAgEgDg8AAiACASAQEQIBSBMUAhG1xZtnm2eNhDAXEgDdt3owTgudh6ullc9j0J2HOslQo2zQThO6xqWlbI+WZFp15b++LEcwTgQKuANwDOxymcsHVcjktlhwTgN6k73yqLLeOOp6e8CrOGTQThOy6ctWadluZ0HSzbKM3RSQTggZzq084r86ShYDrC3EyPZQAAIhABGwr7tRNDSAAGACASAVFgITrtftnixtnjYQwBcYAHWs3caGrS4MzmdF5eotqk9GLmaHBk8ojKxI7apoiUZOZubuyI8pCuluqE3GqG2s7wtJZipNzghs6OgwQAHE7UTQ1AH4Y9IAAY4ngQEB1wD6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIEmwS4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR2zwZAYbbPHBZyHABywFzAcsBcAHLABLMzMn5AMhyAcsBcAHLABLKB8v/ydAg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIGgAEcQEBEvhD+ChUQxPbPBsBigPQ9AQwbSGBYzMBgBD0D2+h8uCHAYFjMyICgBD0FwKBcOYBgBD0D2+h8uCHEoFw5gECgBD0F8gByPQAyQHMcAHKAFUgBBwAiFog10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZYINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WgQEBzwDJ');
+    const __system = Cell.fromBase64('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');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
-    initActivity_init_args({ $$type: 'Activity_init_args', owner, activityMain, activityId })(builder);
+    initActivityMain_init_args({ $$type: 'ActivityMain_init_args', owner })(builder);
     const __data = builder.endCell();
     return { code: __code, data: __data };
 }
 
-const Activity_errors: { [key: number]: { message: string } } = {
+const ActivityMain_errors: { [key: number]: { message: string } } = {
     2: { message: `Stack underflow` },
     3: { message: `Stack overflow` },
     4: { message: `Integer overflow` },
@@ -847,7 +835,7 @@ const Activity_errors: { [key: number]: { message: string } } = {
     62384: { message: `end` },
 }
 
-const Activity_types: ABIType[] = [
+const ActivityMain_types: ABIType[] = [
     {"name":"StateInit","header":null,"fields":[{"name":"code","type":{"kind":"simple","type":"cell","optional":false}},{"name":"data","type":{"kind":"simple","type":"cell","optional":false}}]},
     {"name":"Context","header":null,"fields":[{"name":"bounced","type":{"kind":"simple","type":"bool","optional":false}},{"name":"sender","type":{"kind":"simple","type":"address","optional":false}},{"name":"value","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"raw","type":{"kind":"simple","type":"slice","optional":false}}]},
     {"name":"SendParameters","header":null,"fields":[{"name":"bounce","type":{"kind":"simple","type":"bool","optional":false}},{"name":"to","type":{"kind":"simple","type":"address","optional":false}},{"name":"value","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"mode","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"body","type":{"kind":"simple","type":"cell","optional":true}},{"name":"code","type":{"kind":"simple","type":"cell","optional":true}},{"name":"data","type":{"kind":"simple","type":"cell","optional":true}}]},
@@ -860,51 +848,45 @@ const Activity_types: ABIType[] = [
     {"name":"CreateActivityDo","header":3525543503,"fields":[{"name":"activityId","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"duration","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"minValue","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
     {"name":"DoBuy","header":500584771,"fields":[{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"activityId","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
     {"name":"DoEnd","header":2295491454,"fields":[{"name":"activityId","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
-    {"name":"ActivityData","header":null,"fields":[{"name":"activityId","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"minValue","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"totalAmount","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"activityMain","type":{"kind":"simple","type":"address","optional":false}},{"name":"lastTime","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"lastAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"duration","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"isEnd","type":{"kind":"simple","type":"bool","optional":false}}]},
+    {"name":"ActivityData","header":null,"fields":[{"name":"activityId","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"totalAmount","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"activityMain","type":{"kind":"simple","type":"address","optional":false}},{"name":"lastTime","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"lastAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"duration","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"isEnd","type":{"kind":"simple","type":"bool","optional":false}}]},
     {"name":"AccountInfoData","header":null,"fields":[{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"activity","type":{"kind":"simple","type":"address","optional":false}},{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"lasTime","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
     {"name":"AccountInfoBuy","header":2524003178,"fields":[{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"lasTime","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
 ]
 
-const Activity_getters: ABIGetter[] = [
-    {"name":"get_account_info_address","arguments":[{"name":"ownerAdd","type":{"kind":"simple","type":"address","optional":false}}],"returnType":{"kind":"simple","type":"address","optional":false}},
-    {"name":"get_data","arguments":[],"returnType":{"kind":"simple","type":"ActivityData","optional":false}},
+const ActivityMain_getters: ABIGetter[] = [
+    {"name":"get_activity_address","arguments":[{"name":"activityId","type":{"kind":"simple","type":"int","optional":false,"format":257}}],"returnType":{"kind":"simple","type":"address","optional":false}},
+    {"name":"get_next_id","arguments":[],"returnType":{"kind":"simple","type":"int","optional":false,"format":257}},
+    {"name":"owner","arguments":[],"returnType":{"kind":"simple","type":"address","optional":false}},
 ]
 
-export const Activity_getterMapping: { [key: string]: string } = {
-    'get_account_info_address': 'getGetAccountInfoAddress',
-    'get_data': 'getGetData',
-}
-
-const Activity_receivers: ABIReceiver[] = [
-    {"receiver":"internal","message":{"kind":"typed","type":"CreateActivityDo"}},
-    {"receiver":"internal","message":{"kind":"text","text":"buy"}},
-    {"receiver":"internal","message":{"kind":"typed","type":"DoBuy"}},
-    {"receiver":"internal","message":{"kind":"typed","type":"DoEnd"}},
+const ActivityMain_receivers: ABIReceiver[] = [
+    {"receiver":"internal","message":{"kind":"typed","type":"CreateActivity"}},
+    {"receiver":"internal","message":{"kind":"typed","type":"Deploy"}},
 ]
 
-export class Activity implements Contract {
+export class ActivityMain implements Contract {
     
-    static async init(owner: Address, activityMain: Address, activityId: bigint) {
-        return await Activity_init(owner, activityMain, activityId);
+    static async init(owner: Address) {
+        return await ActivityMain_init(owner);
     }
     
-    static async fromInit(owner: Address, activityMain: Address, activityId: bigint) {
-        const init = await Activity_init(owner, activityMain, activityId);
+    static async fromInit(owner: Address) {
+        const init = await ActivityMain_init(owner);
         const address = contractAddress(0, init);
-        return new Activity(address, init);
+        return new ActivityMain(address, init);
     }
     
     static fromAddress(address: Address) {
-        return new Activity(address);
+        return new ActivityMain(address);
     }
     
     readonly address: Address; 
     readonly init?: { code: Cell, data: Cell };
     readonly abi: ContractABI = {
-        types:  Activity_types,
-        getters: Activity_getters,
-        receivers: Activity_receivers,
-        errors: Activity_errors,
+        types:  ActivityMain_types,
+        getters: ActivityMain_getters,
+        receivers: ActivityMain_receivers,
+        errors: ActivityMain_errors,
     };
     
     private constructor(address: Address, init?: { code: Cell, data: Cell }) {
@@ -912,20 +894,14 @@ export class Activity implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: CreateActivityDo | 'buy' | DoBuy | DoEnd) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: CreateActivity | Deploy) {
         
         let body: Cell | null = null;
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'CreateActivityDo') {
-            body = beginCell().store(storeCreateActivityDo(message)).endCell();
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'CreateActivity') {
+            body = beginCell().store(storeCreateActivity(message)).endCell();
         }
-        if (message === 'buy') {
-            body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
-        }
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'DoBuy') {
-            body = beginCell().store(storeDoBuy(message)).endCell();
-        }
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'DoEnd') {
-            body = beginCell().store(storeDoEnd(message)).endCell();
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
+            body = beginCell().store(storeDeploy(message)).endCell();
         }
         if (body === null) { throw new Error('Invalid message type'); }
         
@@ -933,18 +909,25 @@ export class Activity implements Contract {
         
     }
     
-    async getGetAccountInfoAddress(provider: ContractProvider, ownerAdd: Address) {
+    async getGetActivityAddress(provider: ContractProvider, activityId: bigint) {
         let builder = new TupleBuilder();
-        builder.writeAddress(ownerAdd);
-        let source = (await provider.get('get_account_info_address', builder.build())).stack;
+        builder.writeNumber(activityId);
+        let source = (await provider.get('get_activity_address', builder.build())).stack;
         let result = source.readAddress();
         return result;
     }
     
-    async getGetData(provider: ContractProvider) {
+    async getGetNextId(provider: ContractProvider) {
         let builder = new TupleBuilder();
-        let source = (await provider.get('get_data', builder.build())).stack;
-        const result = loadTupleActivityData(source.readTuple());
+        let source = (await provider.get('get_next_id', builder.build())).stack;
+        let result = source.readBigNumber();
+        return result;
+    }
+    
+    async getOwner(provider: ContractProvider) {
+        let builder = new TupleBuilder();
+        let source = (await provider.get('owner', builder.build())).stack;
+        let result = source.readAddress();
         return result;
     }
     

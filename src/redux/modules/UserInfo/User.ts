@@ -36,7 +36,6 @@ const initialState: CounterState = {
 
 interface SaveTwitterCode {
     twitterCode: string
-    isfollow: number
 }
 
 // 定义Payload类型
@@ -80,8 +79,6 @@ export const UserInfo = createSlice({
         },
         setTwitter: (state, action: PayloadAction<SaveTwitterCode>) => {
             state.twitterCode = action.payload.twitterCode
-            state.isfollow = action.payload.isfollow
-
         },
         setAddress: (state, action: PayloadAction<string>) => {
             state.Account = action.payload
@@ -90,7 +87,7 @@ export const UserInfo = createSlice({
 });
 
 // 导出action
-export const { setUser,setAddress } = UserInfo.actions;
+export const { setUser,setAddress,setTwitter,changeJoinGroup } = UserInfo.actions;
 
 // 导出reducer
 export default UserInfo.reducer;

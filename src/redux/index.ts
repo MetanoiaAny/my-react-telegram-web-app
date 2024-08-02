@@ -2,12 +2,14 @@ import { configureStore, Action, ThunkAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 import  UserInfo  from './modules/UserInfo/User'
+import Balance from "./modules/Balance/Balance";
 
 
 
 const store = configureStore({
     reducer:{
-        User:UserInfo
+        User:UserInfo,
+        Balance:Balance
     }
 })
 

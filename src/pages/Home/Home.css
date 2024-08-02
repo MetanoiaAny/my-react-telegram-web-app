@@ -1,0 +1,23 @@
+.CountDown {
+  background: rgba(7, 14, 27, 0.6);
+
+  position: relative;
+  padding: 2px 6px;
+  border-radius: 6px;
+
+}
+
+.CountDown::before  {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 6px; /* Match the border radius */
+  padding: 2px; /* Adjust as needed for border thickness */
+  background: linear-gradient(180deg, rgba(233, 54, 255, 0.46) 0%, rgba(249, 182, 182, 0.14) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}

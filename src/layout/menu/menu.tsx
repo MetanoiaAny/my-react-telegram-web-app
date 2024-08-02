@@ -3,8 +3,36 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import '@/assets/icon/font1/iconfont.css'
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import "@/assets/icon/font1/iconfont.css";
+
+
+
+const Select_styles =
+  {
+    color: 'white',
+    position: 'relative',
+    '&.Mui-selected': {
+      color: 'white',
+    },
+    '&.Mui-selected::before': {
+      content: '""',
+      position: 'absolute',
+      width:'50px',
+      height: '100%',
+      top: 0,
+      left: '50%',
+      right: 0,
+      bottom: 0,
+      marginLeft: '-25px',
+      background: 'linear-gradient(181deg, rgba(245, 160, 255, 0) -10%, rgba(247, 183, 255, 0.1733) 27%, rgba(205, 72, 222, 0.4) 108%)',
+      filter: 'blur(20px)',
+    },
+    '&.Mui-selected .MuiBottomNavigationAction-label': {
+      fontWeight: 'bold',
+    },
+  }
+
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -28,18 +56,32 @@ const Menu = () => {
       onChange={(_, newValue) => {
         changeRoute(newValue);
       }}
-      sx={{ backgroundColor:'#181A4A',borderRadius:'10px',maxWidth:'1100px'}}
+      sx={{
+        backgroundColor: "#181A4A",
+        borderRadius: "10px",
+        maxWidth: "1100px",
+        border: "1px solid #36386D",
+        transition: "all 0.5s ease",
+      }}
     >
       <BottomNavigationAction
         label="Home"
         value={"Home"}
         icon={<HomeIcon />}
-        sx={{ color: "white" }}
+        sx={Select_styles}
       />
-      <BottomNavigationAction label="Earn" value={"Earn"} icon={
-        <span className="iconfont  icon-svg_coins"></span>
-      } sx={{ color: "white" }} />
-      <BottomNavigationAction label="Earn" value={"Wallet"} icon={<AccountBalanceWalletIcon />} sx={{ color: "white" }} />
+      <BottomNavigationAction
+        label="Earn"
+        value={"Earn"}
+        icon={<span className="iconfont  icon-svg_coins"></span>}
+        sx={Select_styles}
+      />
+      <BottomNavigationAction
+        label="Earn"
+        value={"Wallet"}
+        icon={<AccountBalanceWalletIcon />}
+        sx={Select_styles}
+      />
     </BottomNavigation>
   );
 };

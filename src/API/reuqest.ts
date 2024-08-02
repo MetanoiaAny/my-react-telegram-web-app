@@ -15,8 +15,6 @@ export const getTwitter = async (params: {
 }
 ,Token:string
 ) => {
-
-    
     return await request.request<returnCode<string>>('/twitter/code', 'POST', params,{
         headers:{
             Authorization:Token
@@ -24,7 +22,13 @@ export const getTwitter = async (params: {
     })
 }
 
-
+export const userInfo = async (Token:string) => {
+    return await request.request<returnCode<string>>('/user/myInfo', 'POST', {},{
+        headers:{
+            Authorization:Token
+        }
+    })
+}
 
 
 

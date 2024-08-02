@@ -5,13 +5,24 @@ import gameImg from "@/assets/image/game.webp";
 import { CountDown } from "react-vant";
 
 import TokenImg from "@/assets/image/Token.webp";
-import speedLine from '@/assets/image/speedLine.webp'
+import speedLine from "@/assets/image/speedLine.webp";
+import RankImg from "@/assets/image/Rankimg.webp";
+import TransparentBackground from "@/assets/image/Transparent.png";
 
-import { PointShadow } from "@/components/backgroundShadow";
+import { PointShadow, TopDivider } from "@/components/backgroundShadow";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { onContract } from "@/Ton/useContract";
-import { useEffect } from "react";
+import { onActivity_info } from "@/Ton/useContract";
+import { onGetTonBalance } from "@/Ton/TonUtils";
+import { useEffect, useRef } from "react";
+
+import RankModal from "./Rank";
+
+import "./Home.css";
+import { useAppDispatch, useAppSelector } from "@/redux";
+import { compareAndFormatNumber } from "@/utils/count";
+import { setBalance } from "@/redux/modules/Balance/Balance";
+import { useTonAddress } from "@tonconnect/ui-react";
 
 interface StyledProps {
   $images?: string;
@@ -39,32 +50,58 @@ const TopMenuDiv = styled.div`
 `;
 
 export default function Home() {
-  const navigate = useNavigate();
-
-
-
+  // const navigate = useNavigate();
+  const RankModalRef = useRef();
+  const { TonBalance } = useAppSelector((state) => state.Balance);
+  const dispatch = useAppDispatch();
+  const userFriendlyAddress = useTonAddress();
   useEffect(() => {
     // Ton_get()
-    onContract()
+    // InitActivity(userFriendlyAddress);
+    initUserBalance();
   }, []);
 
+
+
+  const InitActivity = async (Address:string)=>{
+    console.log('InitActivity',Address);
+    
+    const res = await onActivity_info(Address)
+    console.log(res,'InitActivity');
+    
+  }
+
+
+  const initUserBalance = async () => {
+    if (!userFriendlyAddress) return;
+    const balance = await onGetTonBalance(userFriendlyAddress);
+
+    const _balance = compareAndFormatNumber(balance, 2);
+
+    dispatch(setBalance(_balance));
+  };
+
   const onRouteRank = () => {
-    navigate("/Lions/Rank");
+    RankModalRef.current.onShow();
   };
 
   return (
     <div className="w-full h-full flex-1 flex flex-col text-white">
       <div className="relative">
         <TopMenuDiv className="h-[80px] relative flex justify-between items-center px-4 text-xs">
-          <div>
-            <p>X players</p>
+          <div className="text-sm flex justify-center items-center flex-col min-w-[95px] h-full">
+            <p className="text-[#999999]"> players</p>
+            <TopDivider className="my-1.5"></TopDivider>
+            <p>0</p>
           </div>
-          <div>
-            <p>My integral</p>
+          <div className="text-sm flex justify-center items-center flex-col min-w-[120px] h-full">
+            <p className="text-[#999999]"> My integral</p>
+            <TopDivider className="my-1.5"></TopDivider>
+            <p>{TonBalance}</p>
           </div>
           <div className="absolute left-[50%] ml-[-40px] bottom-[-35px]">
+            <p className="text-center text-base">Lions</p>
             <img src={lionsImg} className="w-[80px] h-[80px] " alt="" />
-            <p className="text-center">Lions</p>
           </div>
         </TopMenuDiv>
       </div>
@@ -73,24 +110,25 @@ export default function Home() {
         <PointShadow
           $filter="blur(92px)"
           $shadowColor="linear-gradient(177deg, rgba(7, 229, 255, 0) -25%, #07A8FF 24%);"
-          className="top-1/4 w-[200px] h-[200px] absolute z-1"
+          className="top-1/3 w-[200px] h-[200px] absolute z-1"
         ></PointShadow>
-        <GamePlane $images={speedLine} className="w-full flex justify-center items-center flex-col pt-5 pb-5">
+        <GamePlane
+          $images={speedLine}
+          className="w-full flex justify-center items-center flex-col pt-5 pb-5 rounded-sm"
+        >
           <div>
             <p className="text-center">Time left</p>
             <CountDown
-              time={30 * 60 * 60 * 1000}
+              time={60 * 60 * 1000}
               millisecond
               format="HH:mm:ss:SS"
-              className=" flex justify-center items-center text-white text-3xl"
+              className=" flex justify-center items-center text-white text-base font-bold my-4"
             >
               {(timeData) => (
                 <>
-                  <span className="block mx-2">{timeData.hours}</span>
-                  <span className="colon">:</span>
-                  <span className="block mx-2">{timeData.minutes}</span>
-                  <span className="colon">:</span>
-                  <span className="block mx-2">{timeData.seconds}</span>
+                  <div className="CountDown mx-2">{timeData.minutes}</div>
+                  <div className="colon">:</div>
+                  <div className="CountDown mx-2">{timeData.seconds}</div>
                 </>
               )}
             </CountDown>
@@ -100,29 +138,44 @@ export default function Home() {
             className="w-[220px] h-[350px] relative flex justify-center"
           ></GamePlane>
         </GamePlane>
-        <div className="justify-between flex items-center w-full px-4">
-          <div className="w-[40px]"></div>
-          <div>
-            <PointsButton
-              sx={{ borderRadius: "20px", padding: "6px 20px", color: "#fff" }}
-            >
-              points betting
-            </PointsButton>
+        <GamePlane
+          className="w-full relative flex justify-center flex-col "
+        >
+          <div className="justify-between flex items-center w-full px-4">
+            <div></div>
+            <div>
+              <PointsButton
+                sx={{
+                  borderRadius: "20px",
+                  padding: "6px 15px",
+                  color: "#fff",
+                }}
+              >
+                points betting
+              </PointsButton>
+            </div>
+            <div></div>
           </div>
-          <div className="w-[40px]" onClick={onRouteRank}>
-            <p>Rank</p>
+          <div className="flex justify-between items-center w-full px-2">
+            <div></div>
+            <div></div>
+            <div className="w-[40px]" onClick={onRouteRank}>
+              <img src={RankImg} alt="" />
+              <p>Rank</p>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center justify-center mt-4 relative overflow-hidden w-full">
-          <img src={TokenImg} className="w-[35px] " alt="" />
-          <p className="text-white text-3xl">20000</p>
-          <PointShadow
-          $filter="blur(92px)"
-          $shadowColor="linear-gradient(177deg, rgba(7, 229, 255, 0) -26%, #07A8FF 24%);"
-          className=" w-[150px] h-[150px] absolute z-1"
-        ></PointShadow>
-        </div>
+          <div className="flex items-center justify-center mt-4 relative  w-full">
+            <img src={TokenImg} className="w-[35px] " alt="" />
+            <p className="text-white text-3xl">20000</p>
+            <PointShadow
+              $filter="blur(92px)"
+              $shadowColor="linear-gradient(177deg, rgba(7, 229, 255, 0) -26%, #07A8FF 24%);"
+              className=" w-[140px] h-[140px] absolute z-1"
+            ></PointShadow>
+          </div>
+        </GamePlane>
       </div>
+      <RankModal ref={RankModalRef}></RankModal>
     </div>
   );
 }

@@ -70,14 +70,14 @@ function App() {
   });
 
   const Init = async (initData: string, UserId: number) => {
-    // const _initData =initData
+    const _initData =initData
 
-    // const KeyId = String(UserId);
+    const KeyId = String(UserId);
 
 
-    const KeyId = '7143775970'
-    const _initData =
-      "query_id=AAHiXs0pAwAAAOJezSmVUkzQ&user=%7B%22id%22%3A7143775970%2C%22first_name%22%3A%22outcast%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22fragile173%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1721960645&hash=06770c3a68fc69be88b9e65ea30de8df41a11d4752c9a955e732954d5eac2f26"
+    // const KeyId = '7143775970'
+    // const _initData =
+    //   "query_id=AAHiXs0pAwAAAOJezSmVUkzQ&user=%7B%22id%22%3A7143775970%2C%22first_name%22%3A%22outcast%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22fragile173%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1721960645&hash=06770c3a68fc69be88b9e65ea30de8df41a11d4752c9a955e732954d5eac2f26"
 
     const content = {
       // initData: initData,
@@ -89,17 +89,19 @@ function App() {
       content: data,
     });
     try {
+
+      
       if (res.code == 1) {
-        const decrypt_UserInfo = decryptDes(res.data, KeyId);
-        const _UserInfo = JSON.parse(decrypt_UserInfo)
-        console.log({
-          ..._UserInfo,
-          // id:UserId
-        });
+
+        const decrypt_UserInfo = decryptDes(res.data, String(KeyId)+'tongame');
+
+        
+        const _UserInfo = JSON.parse(decrypt_UserInfo);
+
         
         dispatch(setUser({
           ..._UserInfo,
-          id:UserId
+          id:KeyId
         }))
       } else {
         Notify.show({ type: "danger", message: res.msg });

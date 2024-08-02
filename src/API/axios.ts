@@ -104,9 +104,6 @@ class Request {
     // 使用类型断言来确保 headers 的类型
     const typedHeaders = requestConfig.headers as { address?: string; Authorization?: string }
 
-    console.log(config);
-    
-
     if (address) {
       typedHeaders.address = address
     }

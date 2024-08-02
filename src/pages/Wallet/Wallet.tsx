@@ -7,9 +7,10 @@ import {
 } from "@tonconnect/ui-react";
 import { truncateAddress } from "@/utils/tool";
 import { useEffect, useState } from "react";
-import { onGetTonBalance } from "@/Ton/useContract";
+import { onGetTonBalance } from "@/Ton/TonUtils";
 import { compareAndFormatNumber } from "@/utils/count";
-
+import { useAppDispatch } from "@/redux/index";
+import { setBalance } from "@/redux/modules/Balance/Balance";
 // const ConnectButton = styled(Button)`
 //   border-radius: 20px;
 //   padding: 6px 25px;
@@ -18,6 +19,7 @@ import { compareAndFormatNumber } from "@/utils/count";
 // `
 
 const Wallet = () => {
+  const dispatch = useAppDispatch();
   const userFriendlyAddress = useTonAddress();
   // const rawAddress = useTonAddress(false);
   const [userAddress, setUserAddress] = useState("");
@@ -30,14 +32,17 @@ const Wallet = () => {
     getBalance();
   }, [userFriendlyAddress]);
 
-  useEffect(() => {
-   
-  }, []);
+  useEffect(() => {}, []);
 
   const getBalance = async () => {
+    if (!userFriendlyAddress) return;
     const balance = await onGetTonBalance(userFriendlyAddress);
 
-    setTonBalance(compareAndFormatNumber(balance, 2));
+    const _balance = compareAndFormatNumber(balance, 2);
+    setTonBalance(_balance);
+    dispatch(setBalance(_balance));
+    // dis
+    // setBalance
   };
 
   // console.log('userFriendlyAddress',userFriendlyAddress);
