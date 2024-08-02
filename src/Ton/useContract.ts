@@ -1,7 +1,7 @@
 import { Address, TonClient4 } from '@ton/ton';
 
 
-import { Activity } from '@/Ton/contracts/Activity.ts'
+import { Activity } from '@/Ton/contracts/Activity_.ts'
 import { ActivityMain } from '@/Ton/contracts/ActivityMain.ts'
 import { AccountInfo } from '@/Ton/contracts/AccountInfo.ts'
 import { contracts_address } from '@/config/index.ts'
