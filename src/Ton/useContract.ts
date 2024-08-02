@@ -1,12 +1,12 @@
 import { Address, TonClient4 } from '@ton/ton';
 
 
-import { Activity } from '@/Ton/contracts/Activity'
-import { ActivityMain } from '@/Ton/contracts/ActivityMain'
-import { AccountInfo } from '@/Ton/contracts/AccountInfo'
-import { contracts_address } from '@/config/index'
+import { Activity } from '@/Ton/contracts/Activity.ts'
+import { ActivityMain } from '@/Ton/contracts/ActivityMain.ts'
+import { AccountInfo } from '@/Ton/contracts/AccountInfo.ts'
+import { contracts_address } from '@/config/index.ts'
 
-import {onGetTonBalance} from '@/Ton/TonUtils'
+import {onGetTonBalance} from '@/Ton/TonUtils.ts'
 
 
 

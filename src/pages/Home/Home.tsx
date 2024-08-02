@@ -12,7 +12,7 @@ import RankImg from "@/assets/image/Rankimg.webp";
 import { PointShadow, TopDivider } from "@/components/backgroundShadow";
 import { Button } from "@mui/material";
 // import { useNavigate } from "react-router-dom";
-// import { onActivity_info } from "@/Ton/useContract";
+import { onActivity_info } from "@/Ton/useContract";
 import { onGetTonBalance } from "@/Ton/TonUtils";
 import { useEffect, useRef } from "react";
 
