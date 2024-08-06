@@ -81,17 +81,16 @@ export default function Earn() {
 
   const getUserInfo = async () => {
     console.log(token);
-    
+
     if (token === "") return;
     try {
       const res = await userInfo(token);
       if (res.code === 1) {
         const decrypt_UserInfo = decryptDes(res.data, String(id) + "tongame");
         console.log(decrypt_UserInfo);
-        
+
         const _UserInfo = JSON.parse(decrypt_UserInfo);
- 
-        
+
         dispatch(
           setUser({
             ..._UserInfo,
@@ -105,10 +104,10 @@ export default function Earn() {
     }
   };
 
-  const onTwitterCheck = async(): Promise<number> => {
+  const onTwitterCheck = async (): Promise<number> => {
     if (token === "") return 0;
     await getUserInfo();
-    return 1
+    return 1;
   };
 
   return (
@@ -177,6 +176,8 @@ export default function Earn() {
       </div>
       <TaskModal
         ref={taskRef}
+        isfollow={isfollow}
+        userId={id}
         twitterCode={twitterCode}
         onCheck={onTwitterCheck}
       ></TaskModal>
@@ -191,6 +192,8 @@ interface TaskModalType {
 
 interface TaskModalProps {
   twitterCode: string;
+  isfollow: number;
+  userId: string | number;
   onCheck: () => Promise<number>;
 }
 
@@ -224,7 +227,7 @@ const TaskModal = forwardRef<TaskModalType, TaskModalProps>(
 
     const [JoinTaskCount, setJoinTaskCount] = useState(0);
 
-    const JoinTask =async () => {
+    const JoinTask = async () => {
       if (isfollow == 2) {
         return;
       }
@@ -232,9 +235,11 @@ const TaskModal = forwardRef<TaskModalType, TaskModalProps>(
       setJoinTaskCount(1);
 
       if (twitterCode.length > 0 || JoinTaskCount > 0) {
-        await  onCheck();
+        await onCheck();
         setJoinTaskCount(0);
       } else {
+        console.log('id',id);
+        
         window.open(returnUrl(id));
       }
     };
