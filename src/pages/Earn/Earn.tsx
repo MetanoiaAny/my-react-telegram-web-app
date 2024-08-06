@@ -51,6 +51,9 @@ export default function Earn() {
     if (stateParam && codeParam) {
       sendTwitter(codeParam, stateParam);
     }
+
+    console.log(joinGroup, isfollow, token, id, twitterCode);
+
     // getUserInfo();
   }, [token]);
 
@@ -66,7 +69,7 @@ export default function Earn() {
       );
 
       if (res.code === 1 && res.msg == "Success") {
-        dispatch(setTwitter({ twitterCode: "L" }));
+        dispatch(setTwitter({ twitterCode: "y" }));
         setTimeout(() => {
           getUserInfo();
         }, 5000);
@@ -77,12 +80,18 @@ export default function Earn() {
   };
 
   const getUserInfo = async () => {
+    console.log(token);
+    
     if (token === "") return;
     try {
       const res = await userInfo(token);
       if (res.code === 1) {
         const decrypt_UserInfo = decryptDes(res.data, String(id) + "tongame");
+        console.log(decrypt_UserInfo);
+        
         const _UserInfo = JSON.parse(decrypt_UserInfo);
+ 
+        
         dispatch(
           setUser({
             ..._UserInfo,
@@ -96,10 +105,11 @@ export default function Earn() {
     }
   };
 
-  const onTwitterCheck =()=>{
-    if (token === "") return;
-    getUserInfo();
-  }
+  const onTwitterCheck = async(): Promise<number> => {
+    if (token === "") return 0;
+    await getUserInfo();
+    return 1
+  };
 
   return (
     <>
@@ -165,7 +175,11 @@ export default function Earn() {
           Follow our X account{" "}
         </div> */}
       </div>
-      <TaskModal ref={taskRef} twitterCode={twitterCode} onCheck={onTwitterCheck}></TaskModal>
+      <TaskModal
+        ref={taskRef}
+        twitterCode={twitterCode}
+        onCheck={onTwitterCheck}
+      ></TaskModal>
     </>
   );
 }
@@ -177,22 +191,23 @@ interface TaskModalType {
 
 interface TaskModalProps {
   twitterCode: string;
-  onCheck: () => void;
+  onCheck: () => Promise<number>;
 }
 
+const returnUrl = (code: string | number) => {
+  return `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=TzQtRXNRV0VjREFzZlYzYm9mQTk6MTpjaQ&redirect_uri=https%3A%2F%2Fforestbear.io%2Foauth&scope=offline.access+tweet.read+users.read+follows.read+follows.write&state=${code}&code_challenge=0ioze5m20493ny2&code_challenge_method=plain`;
+};
 
-const X_url =
-  "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=TzQtRXNRV0VjREFzZlYzYm9mQTk6MTpjaQ&redirect_uri=https%3A%2F%2Fforestbear.io%2Ftongame%2FLions%2FEarn&scope=offline.access+tweet.read+users.read+follows.read+follows.write&state=0ioze5m20493ny2&code_challenge=0ioze5m20493ny2&code_challenge_method=plain";
-
-const TaskModal = forwardRef<TaskModalType,TaskModalProps>(
-  ({ twitterCode,onCheck }, ref) => {
-  
+const TaskModal = forwardRef<TaskModalType, TaskModalProps>(
+  ({ twitterCode, onCheck }, ref) => {
     const [visible, setVisible] = useState(false);
     // const onCancel = () => setVisible(false);
 
     const [TaskModalMsg, setTaskModalMsg] = useState("");
 
     const [model, setModel] = useState(0);
+
+    const { id, isfollow } = useAppSelector((state) => state.User);
 
     const onShow = (type: string, model: number) => {
       setTaskModalMsg(type);
@@ -207,17 +222,25 @@ const TaskModal = forwardRef<TaskModalType,TaskModalProps>(
       onShow,
     }));
 
-    const JoinTask = () => {
-      if (model === 0) {
-        window.open("https://t.me/+ViIwy503S7szMmNl");
-      } else {
-        if (twitterCode==='L') {
-          onCheck()
-        }else{
-          window.open(X_url);
-        }
-       
+    const [JoinTaskCount, setJoinTaskCount] = useState(0);
+
+    const JoinTask =async () => {
+      if (isfollow == 2) {
+        return;
       }
+
+      setJoinTaskCount(1);
+
+      if (twitterCode.length > 0 || JoinTaskCount > 0) {
+        await  onCheck();
+        setJoinTaskCount(0);
+      } else {
+        window.open(returnUrl(id));
+      }
+    };
+
+    const JoinGroup = () => {
+      window.open("https://t.me/+ViIwy503S7szMmNl");
     };
 
     return (
@@ -227,7 +250,7 @@ const TaskModal = forwardRef<TaskModalType,TaskModalProps>(
         onClose={() => setVisible(false)}
         sx={{ "& .MuiDrawer-paper": { backgroundColor: "#000" } }}
       >
-        <div className="text-white flex justify-center flex-col items-center px-10 min-h-[260px]  border border-solid border-[#00FFFF] rounded-t-3xl shadow-gray-200">
+        <div className="text-white flex justify-center flex-col items-center px-10 min-h-[260px]  border-t border-solid border-[#00FFFF] rounded-t-3xl shadow-gray-200">
           <div className="my-2">
             {model === 0 ? (
               <img src={tgIcon} className="w-[50px]" />
@@ -240,7 +263,7 @@ const TaskModal = forwardRef<TaskModalType,TaskModalProps>(
           {model === 0 ? (
             <Button
               variant="contained"
-              onClick={JoinTask}
+              onClick={JoinGroup}
               sx={{ borderRadius: "10px", padding: "8px 40px", color: "#fff" }}
             >
               Join
@@ -251,7 +274,7 @@ const TaskModal = forwardRef<TaskModalType,TaskModalProps>(
               onClick={JoinTask}
               sx={{ borderRadius: "10px", padding: "8px 40px", color: "#fff" }}
             >
-              {twitterCode === "L" ? "check" : "Follow"}
+              {twitterCode.length > 0 || JoinTaskCount > 0 ? "check" : "Follow"}
             </Button>
           )}
         </div>

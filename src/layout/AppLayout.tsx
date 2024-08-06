@@ -5,7 +5,7 @@ import { Container } from "@mui/material";
 function AppLayout() {
   return (
     <div className="min-h-screen bg-[#000] ">
-      <div className="w-full h-full pb-20">
+      <div className="w-full h-full ">
         <Outlet />
       </div>
       <Container fixed sx={{ position: "fixed", bottom: 10 }}>
